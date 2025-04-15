@@ -1,4 +1,4 @@
-// email.service.ts
+// src/email/email.service.ts
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 
@@ -6,8 +6,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 export class EmailService {
   constructor(private readonly mailerService: MailerService) {}
 
-  // Define a more specific return type
-  async sendEmail(
+  async sendBeautifulEmail(
     to: string,
     subject: string,
     text: string,
@@ -16,13 +15,16 @@ export class EmailService {
       await this.mailerService.sendMail({
         to,
         subject,
-        text,
+        template: 'welcome',
+        context: {
+          subject,
+          text,
+        },
       });
 
       return { success: true, message: 'Email sent successfully' };
     } catch (err: unknown) {
-      let errorMessage = 'Unknown error occurred while sending email';
-
+      let errorMessage = 'Unknown error occurred';
       if (err instanceof Error) {
         errorMessage = err.message;
       }

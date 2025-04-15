@@ -9,7 +9,7 @@ export class EmailController {
   @Post('send-one')
   async sendToOne(@Body() body: { to: string; subject: string; text: string }) {
     const { to, subject, text } = body;
-    return this.emailService.sendEmail(to, subject, text); // Make sure this call is correct
+    return this.emailService.sendBeautifulEmail(to, subject, text); // Make sure this call is correct
   }
 
   @Post('send-many')
@@ -20,7 +20,7 @@ export class EmailController {
 
     const results = await Promise.all(
       recipients.map((email) =>
-        this.emailService.sendEmail(email, subject, text),
+        this.emailService.sendBeautifulEmail(email, subject, text),
       ),
     );
 
