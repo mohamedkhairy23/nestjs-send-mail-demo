@@ -1,6 +1,7 @@
-// src/email/email.service.ts
+// email.service.ts
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { Express } from 'express'; // import the type
 
 @Injectable()
 export class EmailService {
@@ -10,6 +11,7 @@ export class EmailService {
     to: string,
     subject: string,
     text: string,
+    attachments?: Express.Multer.File[], // Add type here
   ): Promise<{ success: boolean; message: string; error?: string }> {
     try {
       await this.mailerService.sendMail({
@@ -20,6 +22,11 @@ export class EmailService {
           subject,
           text,
         },
+        attachments: attachments?.map((file: Express.Multer.File) => ({
+          filename: file.originalname,
+          content: file.buffer,
+          contentType: file.mimetype,
+        })),
       });
 
       return { success: true, message: 'Email sent successfully' };
